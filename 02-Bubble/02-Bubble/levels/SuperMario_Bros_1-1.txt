@@ -1,0 +1,19 @@
+TILEMAP
+228 14 							-- Size of tile map in tiles
+16 32 							-- Tile size & block size
+images/blocks.png 	-- Tilesheet
+2 2 		
+                   yyy              yyyy                           yyy              yyyy                           yyy               yyyy                           yyy              yyyy
+         yyy       yyy     yyyyyy   yyyy                yyy        yyy     yyyyyy   yyyy                yyy        yyy     yyyyyy    yyyy                yyy        yyy     yyyyyy   yyyy
+         yyy               yyyyyy                       yyy                yyyyyy                       yyy                yyyyyy                        yyy                yyyyyy                     w  yyy
+                                                                                                                                                                                                       w  yyy
+                      q                                                         zzzzzzzz   zzzq              q           zzz     zqqz                                                        tt	       w         3A   3333333      G
+                                                                                                                                                                                            ttt	       w         3                 G
+                                                                                                                                                                                           tttt	       w         3     MMMMM       G
+                                                                                                                                                                                          ttttt	       w    eee  3    MMMMMMM      G
+                q   zqzqz                     gg         gg                  zqz              z     zz    q  q  q     z           zz      t  t          tt  t            zzqz            tttttt        w    eee  3    MMMMMMM      G
+                                      gg      gg         gg                                                                              tt  tt        ttt  tt                          ttttttt        w   eeeee 3    3333333      G
+ sss                        gg        gg      gg sss     gg                                                                             ttt  ttt  sss tttt  ttt     gg              gg tttttttt   sss  w   eeeee 3    3333333   GGGG
+sssss      cccccsss         gg        gg cccc ggsssss    ggcccccsss    ccc               cccc   sssss      cccccsss     ccc            ttttccttttssssttttt  ttttcsssgg  ccc         ggttttttttt  sssss t   eeeee 3    3333333  BGGGG
+111111111111111111111111111111111111111111111111111111111111111111111  111111111111111   11111111111111111111111111111111111111111111111111111111111111111  111111111111111111111111111111111111111111111111111111000000000000000000
+111111111111111111111111111111111111111111111111111111111111111111111  111111111111111   11111111111111111111111111111111111111111111111111111111111111111  111111111111111111111111111111111111111111111111111111000000000000000000
