@@ -13,7 +13,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_FALL_RIGHT, JUMP_FALL_LEFT
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_FALL_RIGHT, JUMP_FALL_LEFT, DELAY_CHANGE_DIRECTION_RIGHT, DELAY_CHANGE_DIRECTION_LEFT, DIE, FLAG
 };
 
 
@@ -42,10 +42,23 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.333f, 0.f));
 
 		sprite->setAnimationSpeed(JUMP_FALL_RIGHT, 8);
-		sprite->addKeyframe(JUMP_FALL_RIGHT, glm::vec2(0.555f, 0.5f));
+		sprite->addKeyframe(JUMP_FALL_RIGHT, glm::vec2(0.555f, 0.f));
 
 		sprite->setAnimationSpeed(JUMP_FALL_LEFT, 8);
-		sprite->addKeyframe(JUMP_FALL_LEFT, glm::vec2(0.555f, 0.f));
+		sprite->addKeyframe(JUMP_FALL_LEFT, glm::vec2(0.555f, 0.5f));
+
+		sprite->setAnimationSpeed(DELAY_CHANGE_DIRECTION_RIGHT, 8);
+		sprite->addKeyframe(DELAY_CHANGE_DIRECTION_RIGHT, glm::vec2(0.444f, 0.f));
+
+		sprite->setAnimationSpeed(DELAY_CHANGE_DIRECTION_LEFT, 8);
+		sprite->addKeyframe(DELAY_CHANGE_DIRECTION_LEFT, glm::vec2(0.444f, 0.5f));
+
+		sprite->setAnimationSpeed(DIE, 8);
+		sprite->addKeyframe(DIE, glm::vec2(0.666f, 0.f));
+
+		sprite->setAnimationSpeed(FLAG, 8);
+		sprite->addKeyframe(DELAY_CHANGE_DIRECTION_LEFT, glm::vec2(0.777f, 0.f));
+		sprite->addKeyframe(DELAY_CHANGE_DIRECTION_LEFT, glm::vec2(0.888f, 0.f));
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -91,7 +104,7 @@ void Player::update(int deltaTime)
 	if(bJumping)
 	{
 		if(direction) sprite->changeAnimation(JUMP_FALL_LEFT);
-		else sprite->changeAnimation(JUMP_FALL_RIGHT);
+		else  sprite->changeAnimation(JUMP_FALL_RIGHT);
 		jumpAngle += JUMP_ANGLE_STEP;
 		if(jumpAngle == 180)
 		{
@@ -111,8 +124,8 @@ void Player::update(int deltaTime)
 		posPlayer.y += FALL_STEP;
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
 		{
-			if (direction) sprite->changeAnimation(STAND_LEFT);
-			else sprite->changeAnimation(STAND_RIGHT);
+			if (sprite->animation() == JUMP_FALL_LEFT) sprite->changeAnimation(STAND_LEFT);
+			else if(sprite->animation() == JUMP_FALL_RIGHT)sprite->changeAnimation(STAND_RIGHT);
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
