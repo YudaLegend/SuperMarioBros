@@ -68,28 +68,23 @@ void Scene::init()
 	player->setPosition(glm::vec2(10, 50));
 
 	player->setTileMap(map);
-	
-	MushMonster* mushMons = new MushMonster();
-	mushMons->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	mushMons->setPosition(glm::vec2(2 * map->getTileSize(), 3 * map->getTileSize()));
-	//mushMons->setOrientation(orientation);
-	//mushMons->setSize(glm::vec2(16, 16));
-	mushMons->setCollisionMap(map);
-	enemies.push_back(mushMons);
 
+	initEnemies();
 	
-	
-	//initEnemies();
-	
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT), 0.f);
+	projection = glm::ortho(16.f, float(SCREEN_WIDTH)+16.f, float(SCREEN_HEIGHT)+16.f, 16.f);
 	currentTime = 0.0f;
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+
 	player->update(deltaTime);
-	//enemies[0]->update(deltaTime);
+	enemies[0]->update(deltaTime);
+
+	glm::ivec2 playerpos = player->getPosition();
+	scroll = -playerpos.x + 2.f;
+
 }
 
 void Scene::render()
@@ -99,15 +94,15 @@ void Scene::render()
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	modelview = glm::mat4(1.0f);
+
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(scroll, 0.f, 0.f)) * glm::mat4(1.0f);
+
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	
-	mapBackground -> render();
+	mapBackground->render();
 	map->render();
-	
 	enemies[0]->render();
-	
 	player->render();
 	
 }
@@ -129,15 +124,18 @@ bool Scene::initEnemies() {
 			sstream.str(line);
 			sstream >> n_enemies;
 			for (int i = 0; i < n_enemies; ++i) {
-				float pos_x, pos_y;
+				stringstream sstream;
+				int x_pos = 0;
+				int y_pos = 0;
 				char orientation;
 				getline(fin, line);
 				sstream.str(line);
-				sstream >> pos_x >> pos_y >> orientation;
+				sstream >> x_pos >> y_pos >> orientation;
+				
 				if (isSkeleton) {
 					MushMonster* mushMons = new MushMonster();
 					mushMons->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-					mushMons->setPosition(glm::vec2(pos_x * map->getTileSize(), pos_y * map->getTileSize()));
+					mushMons->setPosition(glm::vec2(x_pos * map->getTileSize(), y_pos * map->getTileSize()));
 					mushMons->setOrientation(orientation);
 					mushMons->setSize(glm::vec2(16, 16));
 					mushMons->setCollisionMap(map);

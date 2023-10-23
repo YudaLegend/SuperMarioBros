@@ -32,7 +32,7 @@ void MushMonster::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgra
 	sprite->setAnimationSpeed(DEAD, 1);
 	sprite->addKeyframe(DEAD, glm::vec2(2/3.f, 0.f));
 
-	sprite->changeAnimation(DEAD);
+	sprite->changeAnimation(MOVE_RIGHT);
 
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
@@ -41,12 +41,22 @@ void MushMonster::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgra
 void MushMonster::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	position.y += FALL_STEP;
+	if (collisionMap->collisionMoveDown(position, glm::ivec2(16, 16), &position.y)){
 
-	int shift = 0;
-	if (sprite->animation() == MOVE_RIGHT)
-		shift = size.x;
-	if (sprite->animation() == MOVE_LEFT)
-		shift = -size.x;
+		int shift = 0;
+		if (sprite->animation() == MOVE_RIGHT)
+			shift = size.x;
+		if (sprite->animation() == MOVE_LEFT)
+			shift = -size.x;
+		if (sprite->animation() == MOVE_RIGHT) {
+			position.x += 1;
+		}
+		else {
+			position.x -= 1;
+		}
+	}
+
 	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 }

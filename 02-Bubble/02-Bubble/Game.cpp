@@ -11,9 +11,7 @@ void Game::init()
 
 	scene = new Scene();
 	scene->init();
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
-	reshape(width, height);
+
 }
 
 void Game::reshape(int w, int h) {

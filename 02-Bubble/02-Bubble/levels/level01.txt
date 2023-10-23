@@ -43,7 +43,7 @@ images/1-1.png 	-- Tilesheet
 
 MUSHMONSTER
 1
-10 10 L
+4 4 L
 
 
 

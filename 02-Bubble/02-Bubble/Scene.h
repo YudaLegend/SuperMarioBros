@@ -41,6 +41,8 @@ private:
 
 	vector<Enemy*> enemies;
 
+	float scroll;
+
 
 };
 
