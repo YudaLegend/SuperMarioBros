@@ -38,9 +38,9 @@ void MushMonster::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgra
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 }
 
-void MushMonster::update(int deltaTime)
+void MushMonster::update(int deltaTime, float scroll)
 {
-	sprite->update(deltaTime);
+	sprite->update(deltaTime, scroll);
 	position.y += FALL_STEP;
 	if (collisionMap->collisionMoveDown(position, glm::ivec2(16, 16), &position.y)){
 

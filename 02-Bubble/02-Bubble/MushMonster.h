@@ -7,7 +7,7 @@ class MushMonster : public Enemy
 {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	void update(int deltaTime, float scroll);
 	void updateOnCollision();
 	void render();
 

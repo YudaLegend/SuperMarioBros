@@ -66,9 +66,9 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 }
 
-void Player::update(int deltaTime)
+void Player::update(int deltaTime, float scroll)
 {
-	sprite->update(deltaTime);
+	sprite->update(deltaTime, scroll);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if (!direction) direction = true;

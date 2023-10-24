@@ -78,13 +78,13 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-
-	player->update(deltaTime);
-	enemies[0]->update(deltaTime);
+	player->update(deltaTime,scroll);
 
 	glm::ivec2 playerpos = player->getPosition();
-	scroll = -playerpos.x + 2.f;
+	scroll = -playerpos.x;
 
+	player->update(deltaTime, scroll);
+	enemies[0]->update(deltaTime,scroll);
 }
 
 void Scene::render()
@@ -99,7 +99,7 @@ void Scene::render()
 
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	
+
 	mapBackground->render();
 	map->render();
 	enemies[0]->render();

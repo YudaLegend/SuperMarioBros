@@ -46,6 +46,8 @@ void TileMap::free()
 	glDeleteBuffers(1, &vbo);
 }
 
+
+
 bool TileMap::loadLevel(const string &levelFile)
 {
 	ifstream fin;

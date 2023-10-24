@@ -23,7 +23,7 @@ protected:
 
 public:
 	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) = 0;
-	virtual void update(int deltaTime) = 0;
+	virtual void update(int deltaTime, float scroll) = 0;
 	//virtual const glm::vec2& getHitboxOffset();
 	void initSpawn(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	//void initHitbox(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, string entityType);

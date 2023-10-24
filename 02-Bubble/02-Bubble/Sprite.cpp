@@ -34,7 +34,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
 	position = glm::vec2(0.f);
 }
 
-void Sprite::update(int deltaTime)
+void Sprite::update(int deltaTime, float sc)
 {
 	if(currentAnimation >= 0)
 	{
@@ -46,11 +46,12 @@ void Sprite::update(int deltaTime)
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
 	}
+	scroll = sc;
 }
 
 void Sprite::render() const
 {
-	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
+	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(scroll, 0.f, 0.f)) * glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
 	shaderProgram->setUniformMatrix4f("modelview", modelview);
 	shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
 	glEnable(GL_TEXTURE_2D);
@@ -106,5 +107,9 @@ void Sprite::setPosition(const glm::vec2 &pos)
 	position = pos;
 }
 
+
+void Sprite::updateScroll(float sc) {
+	scroll = sc;
+}
 
 

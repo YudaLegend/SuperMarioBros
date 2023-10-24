@@ -36,6 +36,7 @@ private:
 	BackgroundMap* mapBackground;
 	Player* player;
 	ShaderProgram texProgram;
+	ShaderProgram* shaderProgram;
 	float currentTime;
 	glm::mat4 projection;
 
