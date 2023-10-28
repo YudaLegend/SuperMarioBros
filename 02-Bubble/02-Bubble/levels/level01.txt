@@ -44,6 +44,8 @@ MUSHMONSTER
 1
 4 4 L
 
-
+TURTLE
+1
+5 5 L
 
 END

@@ -84,7 +84,10 @@ void Scene::update(int deltaTime)
 	scroll = -playerpos.x;
 
 	player->update(deltaTime, scroll);
-	enemies[0]->update(deltaTime,scroll);
+	for (unsigned int i = 0; i < enemies.size(); ++i) {
+		enemies[i]->update(deltaTime, scroll);
+	}
+	
 }
 
 void Scene::render()
@@ -102,7 +105,9 @@ void Scene::render()
 
 	mapBackground->render();
 	map->render();
-	enemies[0]->render();
+	for (unsigned int i = 0; i < enemies.size(); ++i) {
+		enemies[i]->render();
+	}
 	player->render();
 	
 }
@@ -116,9 +121,10 @@ bool Scene::initEnemies() {
 		return false;
 	getline(fin, line);
 	while (line.compare(0, 3, "END") != 0) {
-		bool isSkeleton = line.compare(0, 11, "MUSHMONSTER") == 0;
+		bool isMush = line.compare(0, 11, "MUSHMONSTER") == 0;
+		bool isTurtle = line.compare(0, 6, "TURTLE") == 0;
 
-		if (isSkeleton) {
+		if (isMush  || isTurtle) {
 			int n_enemies;
 			getline(fin, line);
 			sstream.str(line);
@@ -132,7 +138,7 @@ bool Scene::initEnemies() {
 				sstream.str(line);
 				sstream >> x_pos >> y_pos >> orientation;
 				
-				if (isSkeleton) {
+				if (isMush) {
 					MushMonster* mushMons = new MushMonster();
 					mushMons->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 					mushMons->setPosition(glm::vec2(x_pos * map->getTileSize(), y_pos * map->getTileSize()));
@@ -140,6 +146,15 @@ bool Scene::initEnemies() {
 					mushMons->setSize(glm::vec2(16, 16));
 					mushMons->setCollisionMap(map);
 					enemies.push_back(mushMons);
+				}
+				if (isTurtle) {
+					Turtle* turtle = new Turtle();
+					turtle->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+					turtle->setPosition(glm::vec2(x_pos * map->getTileSize(), y_pos * map->getTileSize()));
+					turtle->setOrientation(orientation);
+					turtle->setSize(glm::vec2(16, 16));
+					turtle->setCollisionMap(map);
+					enemies.push_back(turtle);
 				}
 			}
 		}

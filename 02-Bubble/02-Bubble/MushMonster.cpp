@@ -57,7 +57,6 @@ void MushMonster::update(int deltaTime, float scroll)
 		}
 	}
 
-	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 }
 

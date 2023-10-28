@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "BackgroundMap.h"
 #include "MushMonster.h"
+#include "Turtle.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
