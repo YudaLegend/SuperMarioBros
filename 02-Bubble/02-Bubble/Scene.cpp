@@ -81,11 +81,20 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime,scroll);
 
 	glm::ivec2 playerpos = player->getPosition();
-	scroll = -playerpos.x;
+	
+	if (playerpos.x >= ( -scroll + 129.f) ) {
+		scroll = (-playerpos.x + 128.f)+1;
+	}
+	
 
 	player->update(deltaTime, scroll);
+	
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
-		enemies[i]->update(deltaTime, scroll);
+		glm::ivec2 enemypos = enemies[i]->getPosition();
+		if (enemypos.x <= (-scroll + 272)) { //Aqui 272 son pixeles
+			enemies[i]->update(deltaTime, scroll);
+		}
+		
 	}
 	
 }
@@ -124,15 +133,17 @@ bool Scene::initEnemies() {
 		bool isMush = line.compare(0, 11, "MUSHMONSTER") == 0;
 		bool isTurtle = line.compare(0, 6, "TURTLE") == 0;
 
-		if (isMush  || isTurtle) {
+		if (isMush || isTurtle) {
+			stringstream sstream;
 			int n_enemies;
 			getline(fin, line);
 			sstream.str(line);
 			sstream >> n_enemies;
+			
 			for (int i = 0; i < n_enemies; ++i) {
 				stringstream sstream;
-				int x_pos = 0;
-				int y_pos = 0;
+				float x_pos = 0;
+				float y_pos = 0;
 				char orientation;
 				getline(fin, line);
 				sstream.str(line);
@@ -147,7 +158,7 @@ bool Scene::initEnemies() {
 					mushMons->setCollisionMap(map);
 					enemies.push_back(mushMons);
 				}
-				if (isTurtle) {
+				else if (isTurtle) {
 					Turtle* turtle = new Turtle();
 					turtle->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 					turtle->setPosition(glm::vec2(x_pos * map->getTileSize(), y_pos * map->getTileSize()));

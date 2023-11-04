@@ -26,6 +26,11 @@ public:
 private:
 	bool bJumping;
 	bool direction;//false right true left
+	int acces;
+	int accomulation;
+	int life;
+	int height;
+	bool firstJump;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;

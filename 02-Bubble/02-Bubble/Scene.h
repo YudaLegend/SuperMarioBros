@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
+#include "BigMario.h"
 #include "Player.h"
 #include "BackgroundMap.h"
 #include "MushMonster.h"
@@ -43,7 +44,7 @@ private:
 
 	vector<Enemy*> enemies;
 
-	float scroll;
+	float scroll = 0;
 
 
 };

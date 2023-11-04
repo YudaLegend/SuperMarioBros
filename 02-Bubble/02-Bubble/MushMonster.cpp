@@ -42,7 +42,20 @@ void MushMonster::update(int deltaTime, float scroll)
 {
 	sprite->update(deltaTime, scroll);
 	position.y += FALL_STEP;
-	if (collisionMap->collisionMoveDown(position, glm::ivec2(16, 16), &position.y)){
+	bool collisionDown = collisionMap->collisionMoveDown(position, glm::ivec2(16, 16), &position.y);
+	bool collisionLeft = (sprite->animation() == MOVE_LEFT) && collisionMap->collisionMoveLeft(position + glm::ivec2(-1, 0), size);
+	bool collisionRight = (sprite->animation() == MOVE_RIGHT) && collisionMap->collisionMoveRight(position + glm::ivec2(1, 0), size);
+
+	if ( ! (collisionDown)  || collisionLeft || collisionRight) {
+		if (sprite->animation() == MOVE_RIGHT) {
+			sprite->changeAnimation(MOVE_LEFT);
+		}
+		else {
+			sprite->changeAnimation(MOVE_RIGHT);
+		}
+	}
+
+	if (collisionDown){
 
 		int shift = 0;
 		if (sprite->animation() == MOVE_RIGHT)

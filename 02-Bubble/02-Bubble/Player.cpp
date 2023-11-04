@@ -6,9 +6,9 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
+#define JUMP_ANGLE_STEP 1
 #define JUMP_HEIGHT 10
-#define FALL_STEP 4
+#define FALL_STEP 1
 
 
 enum PlayerAnims
@@ -21,9 +21,14 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bJumping = false;
 	direction = false;
+	firstJump = false;
+	acces = 0;
+	accomulation = 0;
+	life = 3;
+	height = 0;
 	spritesheet.loadFromFile("images/SmallMario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.111, 0.50), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(6);
+	sprite->setNumberAnimations(10);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.5f));
@@ -57,8 +62,8 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(DIE, glm::vec2(0.666f, 0.f));
 
 	sprite->setAnimationSpeed(FLAG, 8);
-	sprite->addKeyframe(DELAY_CHANGE_DIRECTION_LEFT, glm::vec2(0.777f, 0.f));
-	sprite->addKeyframe(DELAY_CHANGE_DIRECTION_LEFT, glm::vec2(0.888f, 0.f));
+	sprite->addKeyframe(FLAG, glm::vec2(0.777f, 0.f));
+	sprite->addKeyframe(FLAG, glm::vec2(0.888f, 0.f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -71,37 +76,58 @@ void Player::update(int deltaTime, float scroll)
 	sprite->update(deltaTime, scroll);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
+		if (acces > -100) acces -= 2;
+
 		if (!direction) direction = true;
+		
 		if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
-		posPlayer.x -= 2;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
-		{
-			posPlayer.x += 2;
-			sprite->changeAnimation(STAND_LEFT);
-		}
+		if (acces > 50) sprite->changeAnimation(DELAY_CHANGE_DIRECTION_LEFT);
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
+		if (acces < 100) acces += 2;
+
 		if (direction) direction = false;
+
 		if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);
-		posPlayer.x += 2;
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
-		{
-			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND_RIGHT);
-		}
+		if (acces < -50) 
+			sprite->changeAnimation(DELAY_CHANGE_DIRECTION_RIGHT);
 	}
 	else
 	{
-		if (sprite->animation() == MOVE_LEFT)
+		if (acces > 0) acces -= 2;
+		else if (acces < 0) acces += 2;
+		
+		if (acces == 0 && direction)
 			sprite->changeAnimation(STAND_LEFT);
-		else if (sprite->animation() == MOVE_RIGHT)
+		else if (acces == 0 && !direction)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
+	accomulation += (acces);
+	if (accomulation >= 100) {
+		posPlayer.x += 1;
+		accomulation = 0;
+	}
+	else if (accomulation <= -100) {
+		posPlayer.x -= 1;
+		accomulation = 0;
+	}
+		
 
-	if (bJumping)
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
+	{
+		posPlayer.x += 1;
+		sprite->changeAnimation(STAND_LEFT);
+	}
+	else if (map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
+	{
+		posPlayer.x -= 1;
+		sprite->changeAnimation(STAND_RIGHT);
+	}
+
+	if (bJumping || (firstJump && !Game::instance().getSpecialKey(GLUT_KEY_UP)))
 	{
 		if (direction) sprite->changeAnimation(JUMP_FALL_LEFT);
 		else  sprite->changeAnimation(JUMP_FALL_RIGHT);
@@ -109,18 +135,21 @@ void Player::update(int deltaTime, float scroll)
 		if (jumpAngle == 180)
 		{
 			bJumping = false;
+			firstJump = false;
 			posPlayer.y = startY;
 		}
 		else
 		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if (jumpAngle > 90)
+			posPlayer.y = int(startY - height * sin(3.14159f * jumpAngle / 180.f));
+			if (jumpAngle > 90) {
 				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y);
+				firstJump = bJumping;
+			}
+				
 		}
 	}
 	else
 	{
-		//sprite->changeAnimation(JUMP_FALL_RIGHT);
 		posPlayer.y += FALL_STEP;
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
 		{
@@ -128,13 +157,24 @@ void Player::update(int deltaTime, float scroll)
 			else if (sprite->animation() == JUMP_FALL_RIGHT)sprite->changeAnimation(STAND_RIGHT);
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
+				if (!firstJump) {
+					height = 50;
+					firstJump = true;
+					jumpAngle = 0;
+					startY = posPlayer.y;
+				}
+				else {
+					height += 2;
+					if(height >= 100)
+						bJumping = true;
+				}
 			}
 		}
+		else {
+			if (direction) sprite->changeAnimation(JUMP_FALL_LEFT);
+			else sprite->changeAnimation(JUMP_FALL_RIGHT);
+		}
 	}
-
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
