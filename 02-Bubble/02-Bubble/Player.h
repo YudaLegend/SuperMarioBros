@@ -1,7 +1,7 @@
 #ifndef _PLAYER_INCLUDE
 #define _PLAYER_INCLUDE
 
-
+#include "Entity.h"
 #include "Sprite.h"
 #include "TileMap.h"
 
@@ -10,7 +10,7 @@
 // all properties it needs to track its movement, jumping, and collisions.
 
 
-class Player
+class Player : public Entity
 {
 
 public:

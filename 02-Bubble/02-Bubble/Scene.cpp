@@ -21,6 +21,7 @@ Scene::Scene()
 	player = NULL;
 	mapBackground = NULL;
 	enemies.clear();
+	int_blocks.clear();
 
 }
 
@@ -34,6 +35,8 @@ Scene::~Scene()
 		delete mapBackground;
 	if (enemies.size() != 0)
 		enemies.clear();
+	if (int_blocks.size() != 0)
+		int_blocks.clear();
 
 }
 
@@ -69,6 +72,13 @@ void Scene::init()
 
 	player->setTileMap(map);
 
+	InterrogantBlock* block = new InterrogantBlock();
+	block->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	block->setPosition(glm::vec2(20, 120));
+
+	int_blocks.push_back(block);
+
+
 	initEnemies();
 	
 	projection = glm::ortho(16.f, float(SCREEN_WIDTH)+16.f, float(SCREEN_HEIGHT)+16.f, 16.f);
@@ -89,6 +99,8 @@ void Scene::update(int deltaTime)
 
 	player->update(deltaTime, scroll);
 	
+	int_blocks[0]->update(deltaTime, scroll);
+
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		glm::ivec2 enemypos = enemies[i]->getPosition();
 		if (enemypos.x <= (-scroll + 272)) { //Aqui 272 son pixeles
@@ -114,6 +126,8 @@ void Scene::render()
 
 	mapBackground->render();
 	map->render();
+	int_blocks[0]->render();
+
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		enemies[i]->render();
 	}

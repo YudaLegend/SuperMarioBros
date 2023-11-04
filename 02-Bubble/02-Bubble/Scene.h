@@ -10,6 +10,7 @@
 #include "BackgroundMap.h"
 #include "MushMonster.h"
 #include "Turtle.h"
+#include "InterrogantBlock.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -43,6 +44,8 @@ private:
 	glm::mat4 projection;
 
 	vector<Enemy*> enemies;
+
+	vector<InterrogantBlock*> int_blocks;
 
 	float scroll = 0;
 
