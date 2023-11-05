@@ -26,11 +26,23 @@ bool Enemy::MarioUp(glm::ivec2 playerpos, int* posY) {
 	
 
 	if (position.x  <= playerpos.x && playerpos.x <= position.x + 16 ) {
-		if ( position.y - 20 <= playerpos.y &&  playerpos.y  <= position.y ) {
+		if ( position.y  > playerpos.y &&  playerpos.y  > position.y - 16 ) {
 			sprite->changeAnimation(DEAD);
 			return true;
 		}
 	} 
+
+	return false;
+}
+
+bool Enemy::enemyKillMario(glm::ivec2 playerpos) {
+
+	if (position.x <= playerpos.x && playerpos.x <= position.x + 16) {
+		if (position.y  <= playerpos.y  &&  playerpos.y <= position.y + 16) {
+			
+			return true;
+		}
+	}
 
 	return false;
 }

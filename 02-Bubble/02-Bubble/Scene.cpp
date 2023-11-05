@@ -24,6 +24,7 @@ Scene::Scene()
 	enemies.clear();
 	int_blocks.clear();
 	jmoneys.clear();
+	mush.clear();
 
 }
 
@@ -41,6 +42,8 @@ Scene::~Scene()
 		int_blocks.clear();
 	if (jmoneys.size() != 0)
 		jmoneys.clear();
+	if (mush.size() != 0)
+		mush.clear();
 
 }
 
@@ -80,8 +83,8 @@ bool Scene::initJmoneys() {
 	for (int i = 0; i < pos_jmoneys.size(); ++i) {
 		JumpingMoney* jcoins = new JumpingMoney();
 		jcoins->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		jcoins->setPosition(pos_blocks[i] * 16);
-		jcoins->setSize(glm::vec2(8, 16));
+		jcoins->setPosition( (pos_jmoneys[i] * 16) + glm::ivec2(4,0) ) ;
+		jcoins->setSize(glm::vec2(16, 16));
 		jmoneys.push_back(jcoins);
 	}
 
@@ -104,16 +107,15 @@ void Scene::init()
 	player->setTileMap(map);
 
 	
+	MushRoom* m = new MushRoom();
+	m->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	m->setPosition(glm::ivec2(10,50));
+	m->setSize(glm::vec2(16, 16));
+	mush.push_back(m);
 
-	JumpingMoney* jcoins = new JumpingMoney();
-	jcoins->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	jcoins->setPosition(glm::vec2(128,100));
-	jcoins->setSize(glm::vec2(8, 16));
-	jmoneys.push_back(jcoins);
 
-
+	initJmoneys();
 	initIntBlocks();
-
 	initEnemies();
 	
 	projection = glm::ortho(16.f, float(SCREEN_WIDTH)+16.f, float(SCREEN_HEIGHT)+16.f, 16.f);
@@ -123,45 +125,54 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime,scroll);
 
+	player->update(deltaTime,scroll);
 	glm::ivec2 playerpos = player->getPosition();
 	
+	//Scroll la camara
 	if (playerpos.x >= ( -scroll + 129.f) ) {
 		scroll = (-playerpos.x + 128.f)+1;
 	}
-	
 
 	player->update(deltaTime, scroll);
-	
-
-	jmoneys[0]->update(deltaTime,scroll);
 
 	//update bloques interrogantes
 	for (unsigned int i = 0; i < int_blocks.size(); ++i) {
 		int_blocks[i]->update(deltaTime, scroll);
 	}
 	
-	if (jmoneys[0]->MarioDown(playerpos)) {
-		player->setStartMode();
+	//Jumping moneys
+	for (unsigned int i = 0; i < jmoneys.size(); ++i) {
+		jmoneys[i]->update(deltaTime, scroll);
 
+		if (player->collisionInt() && jmoneys[i]->MarioDown(playerpos) ) {
+			//moneda +1
+			//player->setStartMode();
+		}
+		if (jmoneys[i]->needDelete()) {
+			jmoneys.erase(std::remove(jmoneys.begin(), jmoneys.end(), jmoneys[i]), jmoneys.end());
+		}
 	}
 
 	//Colision con los bloques interrogantes
 	if (player->collisionInt()) {
 		glm::ivec2 blockpos = player->posInt();
 		for (unsigned int i = 0; i < int_blocks.size(); ++i) {
-			int_blocks[i]->unlock(blockpos);
-		}
-		
+			if (! int_blocks[i] ->isUnlocked() ) {
+				int_blocks[i]->unlock(blockpos);
+			}	
+		}	
 	}
-
 	
 	// Para que los monstruos no se aparezcan cuando el mario este muy lejos
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		glm::ivec2 enemypos = enemies[i]->getPosition();
-		if (enemypos.x <= (-scroll + 272)) { //Aqui 272 son pixeles
+		if (enemypos.x <= (-scroll + 320)) { //Aqui 272 son pixeles
 			enemies[i]->update(deltaTime, scroll);
+
+			if (enemies[i]->enemyKillMario(playerpos)) {
+				player->setStartMode();
+			}
 
 			if (enemies[i]->MarioUp(playerpos, &playerpos.y)) {
 				player->setJump();
@@ -190,8 +201,13 @@ void Scene::render()
 
 	mapBackground->render();
 	map->render();
+
+	mush[0]->render();
+
+	for (unsigned int i = 0; i < jmoneys.size(); ++i) {
+		jmoneys[i]->render();
+	}
 	
-	jmoneys[0]->render();
 
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		enemies[i]->render();
@@ -205,6 +221,7 @@ void Scene::render()
 }
 
 bool Scene::MarioUpEnemy(Player& p, Enemy& e) {
+	
 	
 	return false;
 

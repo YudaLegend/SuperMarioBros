@@ -20,6 +20,7 @@
     <ClInclude Include="InterrogantBlock.h" />
     <ClInclude Include="JumpingMoney.h" />
     <ClInclude Include="MushMonster.h" />
+    <ClInclude Include="MushRoom.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -39,6 +40,7 @@
     <ClCompile Include="JumpingMoney.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MushMonster.cpp" />
+    <ClCompile Include="MushRoom.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />

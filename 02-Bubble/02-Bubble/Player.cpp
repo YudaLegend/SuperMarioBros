@@ -136,6 +136,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Player::update(int deltaTime, float scroll)
 {
 	sprite->update(deltaTime, scroll);
+
 	if (Game::instance().getSpecialKey(GLUT_KEY_F1) && prestar && !starmode) {
 		starmode = true;
 		prestar = false;
@@ -310,6 +311,7 @@ void Player::setJump() {
 	startY = posPlayer.y;
 
 }
+
 
 void Player::setTileMap(TileMap* tileMap)
 {

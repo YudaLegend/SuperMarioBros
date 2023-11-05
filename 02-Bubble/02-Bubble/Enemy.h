@@ -15,6 +15,8 @@ public:
 	void setOrientation(char orientation);
 	void changeOrientation();
 	bool MarioUp(glm::ivec2 pos, int* posY);
+	bool enemyKillMario(glm::ivec2 pos);
+
 
 protected:
 	TileMap* collisionMap;
