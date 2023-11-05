@@ -10,6 +10,7 @@
 #include "BackgroundMap.h"
 #include "MushMonster.h"
 #include "Turtle.h"
+#include "GameUI.h"
 #include "InterrogantBlock.h"
 #include "JumpingMoney.h"
 #include "MushRoom.h"
@@ -33,7 +34,7 @@ public:
 	bool initEnemies();
 	bool initIntBlocks();
 	bool initJmoneys();
-	
+	void initGameUI();
 	bool MarioUpEnemy(Player& p, Enemy& e);
 
 private:
@@ -48,7 +49,7 @@ private:
 	ShaderProgram* shaderProgram;
 	float currentTime;
 	glm::mat4 projection;
-
+	GameUI* gameUI;
 	vector<Enemy*> enemies;
 
 	vector<InterrogantBlock*> int_blocks;

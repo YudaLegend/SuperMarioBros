@@ -117,7 +117,7 @@ void Scene::init()
 	initJmoneys();
 	initIntBlocks();
 	initEnemies();
-	
+	initGameUI();
 	projection = glm::ortho(16.f, float(SCREEN_WIDTH)+16.f, float(SCREEN_HEIGHT)+16.f, 16.f);
 	currentTime = 0.0f;
 }
@@ -183,7 +183,7 @@ void Scene::update(int deltaTime)
 		}
 		
 	}
-	
+	gameUI->update(deltaTime, scroll);
 }
 
 void Scene::render()
@@ -217,7 +217,7 @@ void Scene::render()
 	}
 	
 	player->render();
-	
+	gameUI->render();
 }
 
 bool Scene::MarioUpEnemy(Player& p, Enemy& e) {
@@ -311,5 +311,14 @@ void Scene::initShaders()
 	fShader.free();
 }
 
-
+void Scene::initGameUI() {
+	gameUI = new GameUI();
+	gameUI->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	//gameUI->setPosition(glm::vec2(10, 50));
+	gameUI->setTileMap(map);
+	gameUI->updateCoins();
+	gameUI->updateScore(100);
+	gameUI->updateTime();
+	gameUI->updateWorld(2);
+}
 
