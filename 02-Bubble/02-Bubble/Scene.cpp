@@ -6,6 +6,7 @@
 #include <typeinfo>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 
 #define SCREEN_X 16
@@ -57,6 +58,21 @@ void Scene::reshape(int w, int h) {
 	projection = glm::scale(projection, glm::vec3(scale));
 }
 
+
+bool Scene::initIntBlocks() {
+	
+	for (int i = 0; i < pos_blocks.size(); ++i) {
+		InterrogantBlock* block = new InterrogantBlock();
+		block->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		block->setPosition(pos_blocks[i]*16);
+		block->setSize(glm::vec2(16, 16));
+		int_blocks.push_back(block);
+	}
+
+	return true;
+}
+
+
 void Scene::init()
 {
 	initShaders();
@@ -72,12 +88,9 @@ void Scene::init()
 
 	player->setTileMap(map);
 
-	InterrogantBlock* block = new InterrogantBlock();
-	block->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	block->setPosition(glm::vec2(20, 120));
+	
 
-	int_blocks.push_back(block);
-
+	initIntBlocks();
 
 	initEnemies();
 	
@@ -99,12 +112,34 @@ void Scene::update(int deltaTime)
 
 	player->update(deltaTime, scroll);
 	
-	int_blocks[0]->update(deltaTime, scroll);
 
+	//update bloques interrogantes
+	for (unsigned int i = 0; i < int_blocks.size(); ++i) {
+		int_blocks[i]->update(deltaTime, scroll);
+	}
+	
+
+	//Colision con los bloques interrogantes
+	if (player->collisionInt()) {
+		glm::ivec2 blockpos = player->posInt();
+		for (unsigned int i = 0; i < int_blocks.size(); ++i) {
+			int_blocks[i]->unlock(blockpos);
+		}
+	}
+
+	
+	// Para que los monstruos no se aparezcan cuando el mario este muy lejos
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		glm::ivec2 enemypos = enemies[i]->getPosition();
 		if (enemypos.x <= (-scroll + 272)) { //Aqui 272 son pixeles
 			enemies[i]->update(deltaTime, scroll);
+
+			if (enemies[i]->MarioUp(playerpos, &playerpos.y)) {
+				player->setJump();
+			}
+			if (enemies[i]->isDead()) {
+				enemies.erase(std::remove(enemies.begin(), enemies.end(), enemies[i]), enemies.end());
+			}
 		}
 		
 	}
@@ -126,13 +161,23 @@ void Scene::render()
 
 	mapBackground->render();
 	map->render();
-	int_blocks[0]->render();
+	
 
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		enemies[i]->render();
 	}
+	for (unsigned int i = 0; i < int_blocks.size(); ++i) {
+		int_blocks[i]->render();
+	}
+	
 	player->render();
 	
+}
+
+bool Scene::MarioUpEnemy(Player& p, Enemy& e) {
+	
+	return false;
+
 }
 
 bool Scene::initEnemies() {

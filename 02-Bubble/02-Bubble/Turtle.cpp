@@ -42,6 +42,12 @@ void Turtle::update(int deltaTime, float scroll)
 {
 	sprite->update(deltaTime, scroll);
 	position.y += FALL_STEP;
+
+
+
+	if ((sprite->animation() == DEAD)) ++deadCounter;
+
+
 	if (collisionMap->collisionMoveDown(position, glm::ivec2(16, 16), &position.y)) {
 
 		int shift = 0;
@@ -62,6 +68,9 @@ void Turtle::update(int deltaTime, float scroll)
 
 void Turtle::render() {
 	sprite->render();
+}
+bool Turtle::isDead() {
+	return deadCounter >= 20;
 }
 
 void Turtle::updateOnCollision() {

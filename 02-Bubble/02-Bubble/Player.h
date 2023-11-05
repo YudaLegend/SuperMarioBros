@@ -21,11 +21,19 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 
+	bool collisionInt();
+	glm::ivec2 posInt();
+
 	glm::ivec2 getPosition();
+
+	void setJump();
+	void setStartMode();
 
 private:
 	bool bJumping;
 	bool direction;//false right true left
+	bool starmode;
+	bool prestar;
 	int acces;
 	int accomulation;
 	int life;

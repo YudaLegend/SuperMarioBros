@@ -28,7 +28,7 @@ public:
 	void initSpawn(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	//void initHitbox(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, string entityType);
 	//void changeHitboxVisibility();
-	void render();
+	virtual void render();
 	void setPosition(const glm::vec2& pos);
 	void setSpawnPosition(glm::vec2& spawnPosition);
 	const glm::vec2 getPosition();

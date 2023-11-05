@@ -29,7 +29,7 @@ void InterrogantBlock::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderP
 
 
 
-	sprite->setAnimationSpeed(UNLOCKED, 0);
+	sprite->setAnimationSpeed(UNLOCKED, 1);
 	sprite->addKeyframe(UNLOCKED, glm::vec2(3/4.f, 0.f));
 
 
@@ -42,10 +42,16 @@ void InterrogantBlock::update(int deltaTime, float scroll)
 {
 	sprite->update(deltaTime,scroll);
 
+
 }
 
-void InterrogantBlock::unlock() {
-	if (sprite->animation() == LOCKED_1) {
+void InterrogantBlock::render() {
+	sprite->render();
+}
+
+void InterrogantBlock::unlock(glm::ivec2 pos) {
+	if (sprite->animation() == LOCKED_1 && (position.x/16) == pos.x && (position.y /16 == pos.y )) {
+		
 		sprite->changeAnimation(UNLOCKED);
 	}
 }

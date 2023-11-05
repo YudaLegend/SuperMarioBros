@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 enum Anims {
-	MOVE_RIGHT, MOVE_LEFT
+	MOVE_RIGHT, MOVE_LEFT , DEAD
 };
 
 void Enemy::setCollisionMap(TileMap* collisionMap)
@@ -20,6 +20,21 @@ void Enemy::setOrientation(char orientation) {
 			sprite->changeAnimation(MOVE_LEFT);
 		}
 	}
+}
+
+bool Enemy::MarioUp(glm::ivec2 playerpos, int* posY) {
+	
+
+	if (position.x  <= playerpos.x && playerpos.x <= position.x + 16 ) {
+		if ( position.y - 20 <= playerpos.y &&  playerpos.y  <= position.y ) {
+			sprite->changeAnimation(DEAD);
+
+			return true;
+
+		}
+	} 
+
+	return false;
 }
 
 void Enemy::changeOrientation() {

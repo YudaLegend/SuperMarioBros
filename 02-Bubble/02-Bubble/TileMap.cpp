@@ -237,14 +237,50 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	{
 		if (map[y * mapSize.x + x] != 0)
 		{
-			//return true;
-			if (*posY - tileSize * y <= 4)
+			return true;
+			/*if (*posY - tileSize * y <= 4)
 			{
 				*posY = tileSize * y;
 				return true;
-			}
+			}*/
 		}
 	}
 
 	return false;
+}
+
+bool TileMap::collisionInt(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = pos.y / tileSize;  // Adjusted for upward movement
+
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] == 2)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+glm::ivec2 TileMap::posInt(const glm::ivec2& pos, const glm::ivec2& size, int* posY) 
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = pos.y / tileSize;  // Adjusted for upward movement
+
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] == 2)
+		{
+			return glm::vec2(x, y);
+		}
+	}
+	
 }

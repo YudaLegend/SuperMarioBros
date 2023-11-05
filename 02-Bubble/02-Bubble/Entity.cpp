@@ -5,12 +5,7 @@ using namespace std;
 
 void Entity::render()
 {
-	if (spawning) {
-		spawnSprite->render();
-	}
-	else {
-		sprite->render();
-	}
+
 }
 
 void Entity::setPosition(const glm::vec2& pos)

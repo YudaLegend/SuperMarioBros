@@ -30,7 +30,7 @@ void MushMonster::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgra
 	
 
 	sprite->setAnimationSpeed(DEAD, 1);
-	sprite->addKeyframe(DEAD, glm::vec2(2/3.f, 0.f));
+	sprite->addKeyframe(DEAD, glm::vec2(2/3.f+0.001, 0.f));
 
 	sprite->changeAnimation(MOVE_RIGHT);
 
@@ -55,8 +55,9 @@ void MushMonster::update(int deltaTime, float scroll)
 		}
 	}
 
-	if (collisionDown){
+	if ((sprite->animation() == DEAD)) ++deadCounter;
 
+	if (collisionDown && (sprite->animation() != DEAD)){
 		int shift = 0;
 		if (sprite->animation() == MOVE_RIGHT)
 			shift = size.x;
@@ -74,7 +75,12 @@ void MushMonster::update(int deltaTime, float scroll)
 }
 
 void MushMonster::render() {
-	sprite->render();
+	if ( deadCounter <= 20 ) sprite->render();
+}
+
+bool MushMonster::isDead() {
+	return deadCounter >= 20;
+	
 }
 
 void MushMonster::updateOnCollision() {

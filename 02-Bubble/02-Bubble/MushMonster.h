@@ -11,6 +11,9 @@ public:
 	void updateOnCollision();
 	void render();
 
+	bool isDead();
+
+	int deadCounter = 0;
 
 };
 

@@ -306,6 +306,7 @@ void BigMario::normalAction(bool st) {
 		posPlayer.y += FALL_STEP;
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 32), &posPlayer.y))
 		{
+			if (!firstJump && height != 0) height = 0;
 			if (sprite->animation() == JUMP_FALL_LEFT) sprite->changeAnimation(STAND_LEFT);
 			else if (sprite->animation() == JUMP_FALL_RIGHT)sprite->changeAnimation(STAND_RIGHT);
 			else if (sprite->animation() == JUMP_FALL_LEFT_STAR) sprite->changeAnimation(STAND_LEFT_STAR);
@@ -322,6 +323,7 @@ void BigMario::normalAction(bool st) {
 				else {
 					height += 2;
 					if (height >= 100) {
+						
 						bJumping = true;
 						firstJump = false;
 					}
@@ -334,6 +336,9 @@ void BigMario::normalAction(bool st) {
 		}
 		else
 		{
+			height = 0;
+			bJumping = false;
+			firstJump = false;
 			if (direction && st && sprite->animation() != JUMP_FALL_LEFT_STAR) sprite->changeAnimation(JUMP_FALL_LEFT_STAR);
 			else if (direction && !st && sprite->animation() != JUMP_FALL_LEFT) sprite->changeAnimation(JUMP_FALL_LEFT);
 			else if (!direction && st && sprite->animation() != JUMP_FALL_RIGHT_STAR) sprite->changeAnimation(JUMP_FALL_RIGHT_STAR);
