@@ -18,6 +18,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InterrogantBlock.h" />
+    <ClInclude Include="JumpingMoney.h" />
     <ClInclude Include="MushMonster.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
@@ -35,6 +36,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InterrogantBlock.cpp" />
+    <ClCompile Include="JumpingMoney.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MushMonster.cpp" />
     <ClCompile Include="Player.cpp" />

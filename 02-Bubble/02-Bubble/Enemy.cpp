@@ -28,9 +28,7 @@ bool Enemy::MarioUp(glm::ivec2 playerpos, int* posY) {
 	if (position.x  <= playerpos.x && playerpos.x <= position.x + 16 ) {
 		if ( position.y - 20 <= playerpos.y &&  playerpos.y  <= position.y ) {
 			sprite->changeAnimation(DEAD);
-
 			return true;
-
 		}
 	} 
 

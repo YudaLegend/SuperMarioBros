@@ -42,7 +42,6 @@ void InterrogantBlock::update(int deltaTime, float scroll)
 {
 	sprite->update(deltaTime,scroll);
 
-
 }
 
 void InterrogantBlock::render() {

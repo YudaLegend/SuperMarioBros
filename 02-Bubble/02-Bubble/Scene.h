@@ -11,6 +11,7 @@
 #include "MushMonster.h"
 #include "Turtle.h"
 #include "InterrogantBlock.h"
+#include "JumpingMoney.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -30,6 +31,7 @@ public:
 	void initMap();
 	bool initEnemies();
 	bool initIntBlocks();
+	bool initJmoneys();
 	
 	bool MarioUpEnemy(Player& p, Enemy& e);
 
@@ -50,6 +52,12 @@ private:
 
 	vector<InterrogantBlock*> int_blocks;
 	vector<glm::ivec2> pos_blocks = {glm::vec2(16,9), glm::vec2(21,9), glm::vec2(22,5), glm::vec2(23,9),glm::vec2(78,9), glm::vec2(94,5),glm::vec2(106,9),glm::vec2(109,5),glm::vec2(109,9),glm::vec2(112,9),glm::vec2(129,5),glm::vec2(130,5),glm::vec2(170,9) };
+
+
+	vector<JumpingMoney*> jmoneys;
+	vector<glm::ivec2> pos_jmoneys = { glm::vec2(16,9), glm::vec2(21,9), glm::vec2(22,5), glm::vec2(23,9),glm::vec2(78,9), glm::vec2(94,5),glm::vec2(106,9),glm::vec2(109,5),glm::vec2(109,9),glm::vec2(112,9),glm::vec2(129,5),glm::vec2(130,5),glm::vec2(170,9) };
+
+
 
 
 	float scroll = 0;

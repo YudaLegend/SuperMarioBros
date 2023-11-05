@@ -23,6 +23,7 @@ Scene::Scene()
 	mapBackground = NULL;
 	enemies.clear();
 	int_blocks.clear();
+	jmoneys.clear();
 
 }
 
@@ -38,6 +39,8 @@ Scene::~Scene()
 		enemies.clear();
 	if (int_blocks.size() != 0)
 		int_blocks.clear();
+	if (jmoneys.size() != 0)
+		jmoneys.clear();
 
 }
 
@@ -72,6 +75,18 @@ bool Scene::initIntBlocks() {
 	return true;
 }
 
+bool Scene::initJmoneys() {
+
+	for (int i = 0; i < pos_jmoneys.size(); ++i) {
+		JumpingMoney* jcoins = new JumpingMoney();
+		jcoins->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		jcoins->setPosition(pos_blocks[i] * 16);
+		jcoins->setSize(glm::vec2(8, 16));
+		jmoneys.push_back(jcoins);
+	}
+
+	return true;
+}
 
 void Scene::init()
 {
@@ -89,6 +104,13 @@ void Scene::init()
 	player->setTileMap(map);
 
 	
+
+	JumpingMoney* jcoins = new JumpingMoney();
+	jcoins->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	jcoins->setPosition(glm::vec2(128,100));
+	jcoins->setSize(glm::vec2(8, 16));
+	jmoneys.push_back(jcoins);
+
 
 	initIntBlocks();
 
@@ -113,11 +135,17 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime, scroll);
 	
 
+	jmoneys[0]->update(deltaTime,scroll);
+
 	//update bloques interrogantes
 	for (unsigned int i = 0; i < int_blocks.size(); ++i) {
 		int_blocks[i]->update(deltaTime, scroll);
 	}
 	
+	if (jmoneys[0]->MarioDown(playerpos)) {
+		player->setStartMode();
+
+	}
 
 	//Colision con los bloques interrogantes
 	if (player->collisionInt()) {
@@ -125,6 +153,7 @@ void Scene::update(int deltaTime)
 		for (unsigned int i = 0; i < int_blocks.size(); ++i) {
 			int_blocks[i]->unlock(blockpos);
 		}
+		
 	}
 
 	
@@ -162,6 +191,7 @@ void Scene::render()
 	mapBackground->render();
 	map->render();
 	
+	jmoneys[0]->render();
 
 	for (unsigned int i = 0; i < enemies.size(); ++i) {
 		enemies[i]->render();
