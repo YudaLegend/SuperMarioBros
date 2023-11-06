@@ -8,28 +8,44 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-
+	menumode = true;
 	scene = new Scene();
 	scene->init();
-
+	menu = new MenuUI();
+	menu->init();
 }
 
 void Game::reshape(int w, int h) {
-	scene->reshape(w, h);
-	
+	if (menumode) {
+		menu->reshape(w, h);
+	}
+	else {
+		scene->reshape(w, h);
+	}
+
 }
 
 bool Game::update(int deltaTime)
 {
-	scene->update(deltaTime);
-	
+	menumode = menu->getMode() != 0 && menu->getMode() != 1;
+	if (menumode) {
+		menu->update(deltaTime);
+	}
+	else {
+		scene->update(deltaTime);
+	}
 	return bPlay;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene->render();
+	if (menumode) {
+		menu->render();
+	}
+	else {
+		scene->render();
+	}
 }
 
 void Game::keyPressed(int key)

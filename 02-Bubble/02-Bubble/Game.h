@@ -3,7 +3,7 @@
 
 
 #include "Scene.h"
-
+#include "MenuUI.h"
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 240
 
@@ -48,6 +48,8 @@ private:
 	Scene *scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
+	MenuUI* menu;
+	bool menumode;
 
 };
 
