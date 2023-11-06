@@ -39,6 +39,7 @@ private:
 	int life;
 	int height;
 	bool firstJump;
+	int speed;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;

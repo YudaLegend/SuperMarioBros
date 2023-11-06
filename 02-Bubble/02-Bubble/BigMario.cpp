@@ -10,7 +10,6 @@
 #define JUMP_HEIGHT 10
 #define FALL_STEP 1
 
-
 enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_FALL_RIGHT, JUMP_FALL_LEFT, DELAY_CHANGE_DIRECTION_RIGHT, DELAY_CHANGE_DIRECTION_LEFT, DIE, FLAG, MID_RIGHT, MID_LEFT, STAND_LEFT_STAR, STAND_RIGHT_STAR, MOVE_LEFT_STAR, MOVE_RIGHT_STAR, JUMP_FALL_RIGHT_STAR, JUMP_FALL_LEFT_STAR, DELAY_CHANGE_DIRECTION_RIGHT_STAR, DELAY_CHANGE_DIRECTION_LEFT_STAR, DIE_STAR, FLAG_STAR, MID_RIGHT_STAR, MID_LEFT_STAR
@@ -29,6 +28,7 @@ void BigMario::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	accomulation = 0;
 	life = 3;
 	height = 0;
+	speed = 1;
 	spritesheet.loadFromFile("images/BigMarioStar.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 32), glm::vec2(0.111, 0.125), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(24);
@@ -165,7 +165,6 @@ void BigMario::update(int deltaTime, float scroll)
 	else if (!Game::instance().getSpecialKey(GLUT_KEY_F1) && !prestar) {
 		prestar = true;
 	}
-
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		middleAction();
 		if (direction && !starmode && sprite->animation() != MID_LEFT) 
@@ -206,7 +205,7 @@ glm::ivec2 BigMario::getPosition() {
 void BigMario::normalAction(bool st) {
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if (acces > -100) acces -= 2;
+		if (acces > -100) acces -= 1;
 
 		if (!direction) direction = true;
 		if (st && !bJumping) {
@@ -221,7 +220,7 @@ void BigMario::normalAction(bool st) {
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if (acces < 100) acces += 2;
+		if (acces < 100) acces += 1;
 
 		if (direction) direction = false;
 		if (st && !bJumping) {
@@ -236,8 +235,8 @@ void BigMario::normalAction(bool st) {
 	}
 	else
 	{
-		if (acces > 0) acces -= 2;
-		else if (acces < 0) acces += 2;
+		if (acces > 0) acces -= 1;
+		else if (acces < 0) acces += 1;
 
 		if (acces == 0 && direction && !bJumping) {
 			if (st && sprite->animation() != STAND_LEFT_STAR) sprite->changeAnimation(STAND_LEFT_STAR);
@@ -249,6 +248,12 @@ void BigMario::normalAction(bool st) {
 			else if (!st && sprite->animation() != STAND_RIGHT)
 				sprite->changeAnimation(STAND_RIGHT);
 		}
+	}
+	if (Game::instance().getSpecialKey(112)) {
+		speed = 2;
+	}
+	else {
+		speed = 1;
 	}
 	accomulation += (acces);
 	if (accomulation >= 100) {
@@ -262,13 +267,13 @@ void BigMario::normalAction(bool st) {
 
 	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 32)))
 	{
-		posPlayer.x += 1;
+		posPlayer.x += speed;
 		if (st && sprite->animation() != STAND_LEFT_STAR) sprite->changeAnimation(STAND_LEFT_STAR);
 		else if (sprite->animation() != STAND_LEFT) sprite->changeAnimation(STAND_LEFT);
 	}
 	else if (map->collisionMoveRight(posPlayer, glm::ivec2(16, 32)))
 	{
-		posPlayer.x -= 1;
+		posPlayer.x -= speed;
 		if (st && sprite->animation() != STAND_RIGHT_STAR) sprite->changeAnimation(STAND_RIGHT_STAR);
 		else if (sprite->animation() != STAND_RIGHT)sprite->changeAnimation(STAND_RIGHT);
 	}
@@ -312,7 +317,7 @@ void BigMario::normalAction(bool st) {
 			else if (sprite->animation() == JUMP_FALL_LEFT_STAR) sprite->changeAnimation(STAND_LEFT_STAR);
 			else if (sprite->animation() == JUMP_FALL_RIGHT_STAR)sprite->changeAnimation(STAND_RIGHT_STAR);
 
-			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			if (Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey(32))
 			{
 				if (!firstJump) {
 					height = 50;

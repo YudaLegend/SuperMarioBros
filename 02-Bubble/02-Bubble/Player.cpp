@@ -28,6 +28,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	accomulation = 0;
 	life = 3;
 	height = 0;
+	speed = 1;
 	spritesheet.loadFromFile("images/SmallMarioStar.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.111, 0.125), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(20);
@@ -196,26 +197,32 @@ void Player::update(int deltaTime, float scroll)
 				sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
+	if (Game::instance().getSpecialKey(112)) {
+		speed = 2;
+	}
+	else {
+		speed = 1;
+	}
 	accomulation += (acces);
 	if (accomulation >= 100) {
-		posPlayer.x += 1;
+		posPlayer.x += speed;
 		accomulation = 0;
 	}
 	else if (accomulation <= -100) {
-		posPlayer.x -= 1;
+		posPlayer.x -= speed;
 		accomulation = 0;
 	}
 		
 
 	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
 	{
-		posPlayer.x += 1;
+		posPlayer.x += speed;
 		if (starmode && sprite->animation() != STAND_LEFT_STAR) sprite->changeAnimation(STAND_LEFT_STAR);
 		else if (sprite->animation() != STAND_LEFT) sprite->changeAnimation(STAND_LEFT);
 	}
 	else if (map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
 	{
-		posPlayer.x -= 1;
+		posPlayer.x -= speed;
 		if (starmode && sprite->animation() != STAND_RIGHT_STAR) sprite->changeAnimation(STAND_RIGHT_STAR);
 		else if (sprite->animation() != STAND_RIGHT)sprite->changeAnimation(STAND_RIGHT);
 	}
@@ -259,7 +266,7 @@ void Player::update(int deltaTime, float scroll)
 			else if (sprite->animation() == JUMP_FALL_LEFT_STAR) sprite->changeAnimation(STAND_LEFT_STAR);
 			else if (sprite->animation() == JUMP_FALL_RIGHT_STAR)sprite->changeAnimation(STAND_RIGHT_STAR);
 
-			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			if (Game::instance().getSpecialKey(GLUT_KEY_UP) || Game::instance().getKey(32))
 			{
 				if (!firstJump) {
 					height = 50;
