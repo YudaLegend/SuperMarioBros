@@ -1,19 +1,15 @@
-#ifndef _BIGMARIO_INCLUDE
-#define _BIGMARIO_INCLUDE
+#pragma once
+#ifndef _SMALLMARIO_INCLUDE
+#define _SMALLMARIO_INDLUDE
 
-
+#include "Entity.h"
 #include "Sprite.h"
 #include "TileMap.h"
 
-
-// Player is basically a Sprite that represents the player. As such it has
-// all properties it needs to track its movement, jumping, and collisions.
-
-
-class BigMario
+class SmallMario : public Entity
 {
-
 public:
+	//SmallMario();
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime, float scroll);
 	void render();
@@ -21,20 +17,18 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 
-	void normalAction(bool starmode);
-	void middleAction();
-
-	glm::ivec2 getPosition();
-
 	bool collisionInt();
 
 	glm::ivec2 posInt();
 
+	glm::ivec2 getPosition();
+
 	void setJump();
 	void setStartMode();
 
+	
+
 private:
-	bool middle;
 	bool bJumping;
 	bool direction;//false right true left
 	bool starmode;
@@ -49,9 +43,6 @@ private:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-
 };
 
-
-#endif 
-
+#endif
