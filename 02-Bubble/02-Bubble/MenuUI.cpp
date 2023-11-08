@@ -231,6 +231,10 @@ void MenuUI::updateshowOptions() {
 	else if (preinfo1) {
 		preinfo1 = false;
 		scenemode = mode;
+		if (scenemode == 0 || scenemode == 1) {
+			Game::instance().setMenuMode(2);
+			Game::instance().stopGame(2);
+		} 
 	}
 		
 	if (Game::instance().getKey(13) && scenemode != -1) {

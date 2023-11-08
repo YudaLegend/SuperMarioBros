@@ -14,6 +14,7 @@ enum LN
 
 void GameUI::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
+	ti = 0;
 	coins = 0;
 	time = 300;
 	score = 0;
@@ -320,6 +321,11 @@ void GameUI::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void GameUI::update(int deltaTime, float scroll)
 {
+	ti += deltaTime;
+	if (ti >= 1000) {
+		ti -= 1000;
+		updateTime();
+	}
 	for (int i = 0; i < 14; i++) {
 		row[i]->update(deltaTime, 0);
 		//row[i]->setPosition(glm::vec2(float(tileMapDispl.x + i * 8), float(tileMapDispl.y + 16)));
@@ -444,4 +450,18 @@ void GameUI::updateScore(int s) {
 
 glm::ivec2 GameUI::getPosition() {
 	return posPlayer;
+}
+
+void GameUI::clear() {
+	coins = 0;
+	time = 300;
+	score = 0;
+	world = 0;
+}
+
+void GameUI::reset(int s, int c, int w, int t) {
+	score = s;
+	coins = c;
+	time = t;
+	world = w;
 }

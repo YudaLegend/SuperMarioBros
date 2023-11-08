@@ -31,10 +31,33 @@ public:
 	void setStartMode();
 
 	void setSmall();
+	void bigMarioButton();
+
+	void BigMarioNormal(bool st);
+	void BigMarioMiddle();
+
+	void starButton();
+
+	void SmallMario();
+
+	void BigMario();
 private:
-	SmallMario* sm;
-	BigMario* bm;
-	bool mode; //false = small, true = true
+	bool mariomode; //false = small, true = big
+	bool premario;
+	bool bJumping;
+	bool direction;//false right true left
+	bool starmode;
+	bool prestar;
+	int acces;
+	int accomulation;
+	int height;
+	bool firstJump;
+	int speed;
+	glm::ivec2 tileMapDispl, posPlayer;
+	int jumpAngle, startY;
+	vector <Texture> spritesheet;
+	vector <Sprite*> sprite;
+	TileMap* map;
 };
 
 

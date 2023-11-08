@@ -22,6 +22,10 @@ public:
 	void updateCoins();
 	void updateScore(int s);
 	void updateTime();
+
+
+	void clear();
+	void reset(int s, int c, int w, int t);
 	glm::ivec2 getPosition();
 
 private:
@@ -31,7 +35,7 @@ private:
 	vector <Sprite*> row2;
 	//Sprite* coins;
 	TileMap* map;
-
+	int ti;
 	int world, coins, score, time;
 };
 

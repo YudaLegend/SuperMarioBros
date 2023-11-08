@@ -25,7 +25,6 @@ Scene::Scene()
 	int_blocks.clear();
 	jmoneys.clear();
 	mush.clear();
-
 }
 
 Scene::~Scene()
@@ -47,7 +46,15 @@ Scene::~Scene()
 
 }
 
-
+void Scene::clear() {
+	map = NULL;
+	player = NULL;
+	mapBackground = NULL;
+	enemies.clear();
+	int_blocks.clear();
+	jmoneys.clear();
+	mush.clear();
+}
 void Scene::initMap() {
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map->setScene(this);

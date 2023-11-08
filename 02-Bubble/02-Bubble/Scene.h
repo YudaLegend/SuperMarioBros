@@ -36,7 +36,7 @@ public:
 	bool initJmoneys();
 	void initGameUI();
 	bool MarioUpEnemy(Player& p, Enemy& e);
-
+	void clear();
 private:
 	void initShaders();
 

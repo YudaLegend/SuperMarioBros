@@ -178,7 +178,7 @@ void BigMario::update(int deltaTime, float scroll)
 	else {
 		normalAction(starmode);
 	}
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	
 }
 
 void BigMario::render()
