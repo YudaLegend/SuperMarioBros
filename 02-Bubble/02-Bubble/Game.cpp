@@ -206,7 +206,7 @@ void Game::fastChangeLevel() {
 		life = 3;
 		world = 1;
 		menumode = 2;
-		scene->clear();
+		scene = new Scene();
 		scene->init();
 		stopGame(2);
 	}
