@@ -28,6 +28,7 @@ public:
 	void reset(int s, int c, int w, int t);
 	glm::ivec2 getPosition();
 
+	void setFinish();
 private:
 	glm::ivec2 tileMapDispl, posPlayer;
 	vector <Texture> spritesheets;
@@ -37,6 +38,7 @@ private:
 	TileMap* map;
 	int ti;
 	int world, coins, score, time;
+	bool finish;
 };
 
 

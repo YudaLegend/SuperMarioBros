@@ -257,3 +257,7 @@ void MenuUI::clear() {
 	preinfo1 = false;
 	preinfo2 = false;
 }
+
+void MenuUI::finish() {
+
+}

@@ -41,6 +41,10 @@ public:
 	void SmallMario();
 
 	void BigMario();
+
+	void ScoreAnimation(int i);
+
+	void convertion(int i);
 private:
 	bool mariomode; //false = small, true = big
 	bool premario;
@@ -48,11 +52,13 @@ private:
 	bool direction;//false right true left
 	bool starmode;
 	bool prestar;
+	int convertionTime;
 	int acces;
 	int accomulation;
 	int height;
 	bool firstJump;
 	int speed;
+	int scoreAnimationTimer;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	vector <Texture> spritesheet;

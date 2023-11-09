@@ -215,6 +215,7 @@ void Game::fastChangeLevel() {
 		prelevel2 = true;
 	}
 	else if (prelevel2) {
+
 		prelevel2 = false;
 	}
 }

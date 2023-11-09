@@ -18,16 +18,19 @@ enum SmallAnims
 {
 	B_STAND_LEFT, B_STAND_RIGHT, B_MOVE_LEFT, B_MOVE_RIGHT, B_JUMP_FALL_RIGHT, B_JUMP_FALL_LEFT, B_DELAY_CHANGE_DIRECTION_RIGHT, B_DELAY_CHANGE_DIRECTION_LEFT, B_DIE, B_FLAG, B_STAND_LEFT_STAR, B_STAND_RIGHT_STAR, B_MOVE_LEFT_STAR, B_MOVE_RIGHT_STAR, B_JUMP_FALL_RIGHT_STAR, B_JUMP_FALL_LEFT_STAR, B_DELAY_CHANGE_DIRECTION_RIGHT_STAR, B_DELAY_CHANGE_DIRECTION_LEFT_STAR, B_FLAG_STAR, MID_RIGHT, MID_LEFT, MID_RIGHT_STAR, MID_LEFT_STAR
 };
+
+
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	spritesheet.resize(2);
-	sprite.resize(2);
+	spritesheet.resize(4);
+	sprite.resize(4);
 	bJumping = false;
 	direction = false;
 	firstJump = false;
 	starmode = false;
 	prestar = false;
 	mariomode = false;
+	convertionTime = 0;
 	acces = 0;
 	accomulation = 0;
 	height = 0;
@@ -253,22 +256,100 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite[1]->changeAnimation(0);
 	sprite[1]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
+	spritesheet[2].loadFromFile("images/16_8Score.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite[2] = Sprite::createSprite(glm::ivec2(16, 8), glm::vec2(1.f, 1/11.f), &spritesheet[2], &shaderProgram);
+	sprite[2]->setNumberAnimations(11);
+
+	sprite[2]->setAnimationSpeed(0, 2);
+	sprite[2]->addKeyframe(0, glm::vec2(0.f, 0.f));
+
+	sprite[2]->setAnimationSpeed(1, 2);
+	sprite[2]->addKeyframe(1, glm::vec2(0.f, 1/11.f));
+
+	sprite[2]->setAnimationSpeed(2, 2);
+	sprite[2]->addKeyframe(2, glm::vec2(0.f, 2 / 11.f));
+
+	sprite[2]->setAnimationSpeed(3, 2);
+	sprite[2]->addKeyframe(3, glm::vec2(0.f, 3 / 11.f));
+
+	sprite[2]->setAnimationSpeed(4, 2);
+	sprite[2]->addKeyframe(4, glm::vec2(0.f, 4 / 11.f));
+
+	sprite[2]->setAnimationSpeed(5, 2);
+	sprite[2]->addKeyframe(5, glm::vec2(0.f, 5 / 11.f));
+
+	sprite[2]->setAnimationSpeed(6, 2);
+	sprite[2]->addKeyframe(6, glm::vec2(0.f, 6 / 11.f));
+
+	sprite[2]->setAnimationSpeed(7, 2);
+	sprite[2]->addKeyframe(7, glm::vec2(0.f, 7 / 11.f));
+
+	sprite[2]->setAnimationSpeed(8, 2);
+	sprite[2]->addKeyframe(8, glm::vec2(0.f, 8 / 11.f));
+
+	sprite[2]->setAnimationSpeed(9, 2);
+	sprite[2]->addKeyframe(9, glm::vec2(0.f, 9 / 11.f));
+
+	sprite[2]->setAnimationSpeed(10, 2);
+	sprite[2]->addKeyframe(10, glm::vec2(0.f, 10 / 11.f));
+
+	sprite[2]->changeAnimation(0);
+	sprite[2]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 16)));
+
+	spritesheet[3].loadFromFile("images/MarioConvertion.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite[3] = Sprite::createSprite(glm::ivec2(16,32), glm::vec2(1/7.f, 1 / 2.f), &spritesheet[3], &shaderProgram);
+	sprite[3]->setNumberAnimations(4);
+
+	sprite[3]->setAnimationSpeed(0, 8);
+	sprite[3]->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite[3]->addKeyframe(0, glm::vec2(1/7.f, 0.f));
+	sprite[3]->addKeyframe(0, glm::vec2(2/7.f, 0.f));
+	sprite[3]->addKeyframe(0, glm::vec2(3/7.f, 0.f));
+
+	sprite[3]->setAnimationSpeed(1, 8);
+	sprite[3]->addKeyframe(1, glm::vec2(3/7.f, 0.f));
+	sprite[3]->addKeyframe(1, glm::vec2(4/7.f, 0.f));
+	sprite[3]->addKeyframe(1, glm::vec2(5/7.f, 0.f));
+	sprite[3]->addKeyframe(1, glm::vec2(6/7.f, 0.f));
+
+	sprite[3]->setAnimationSpeed(2, 8);
+	sprite[3]->addKeyframe(2, glm::vec2(0.f, 0.5f));
+	sprite[3]->addKeyframe(2, glm::vec2(1 / 7.f, 0.5f));
+	sprite[3]->addKeyframe(2, glm::vec2(2 / 7.f, 0.5f));
+	sprite[3]->addKeyframe(2, glm::vec2(3 / 7.f, 0.5f));
+
+	sprite[3]->setAnimationSpeed(3, 8);
+	sprite[3]->addKeyframe(3, glm::vec2(3 / 7.f, 0.5f));
+	sprite[3]->addKeyframe(3, glm::vec2(4 / 7.f, 0.5f));
+	sprite[3]->addKeyframe(3, glm::vec2(5 / 7.f, 0.5f));
+	sprite[3]->addKeyframe(3, glm::vec2(6 / 7.f, 0.5f));
+
+	sprite[3]->changeAnimation(0);
+	sprite[3]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 16)));
 }
 
 void Player::update(int deltaTime, float scroll)
 {
-	sprite[0]->update(deltaTime, scroll);
-	sprite[1]->update(deltaTime, scroll);
-
-	starButton();
-
-	bigMarioButton();
-	if (!mariomode) {
-		SmallMario();
+	if (convertionTime > 0) {
+		convertionTime -= deltaTime;
+		sprite[3]->update(deltaTime, scroll);
 	}
 	else {
-		
-		BigMario();
+		sprite[0]->update(deltaTime, scroll);
+		sprite[1]->update(deltaTime, scroll);
+		sprite[2]->update(deltaTime, scroll);
+		scoreAnimationTimer -= deltaTime;
+		if (scoreAnimationTimer < 0) scoreAnimationTimer = 0;
+		starButton();
+
+		bigMarioButton();
+		if (!mariomode) {
+			SmallMario();
+		}
+		else {
+			BigMario();
+		}
 	}
 }
 
@@ -288,6 +369,7 @@ void Player::SmallMario() {
 
 		if (acces > 50 && !starmode && sprite[0]->animation() != DELAY_CHANGE_DIRECTION_LEFT && !bJumping) sprite[0]->changeAnimation(DELAY_CHANGE_DIRECTION_LEFT);
 		else if (acces > 50 && starmode && sprite[0]->animation() != DELAY_CHANGE_DIRECTION_LEFT_STAR && !bJumping) sprite[0]->changeAnimation(DELAY_CHANGE_DIRECTION_LEFT_STAR);
+		ScoreAnimation(0);
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
@@ -445,13 +527,16 @@ void Player::BigMario() {
 
 void Player::render()
 {
-	if (!mariomode) {
-		sprite[0]->render();
-	}
+	if (convertionTime > 0)sprite[3]->render();
+	else if (scoreAnimationTimer != 0) sprite[2]->render();
 	else {
-		sprite[1]->render();
+		if (!mariomode) {
+			sprite[0]->render();
+		}
+		else {
+			sprite[1]->render();
+		}
 	}
-	
 }
 
 
@@ -784,4 +869,18 @@ void Player::bigMarioButton() {
 	else if (!Game::instance().getKey(109) && !premario) {
 		premario = true;
 	}
+}
+
+void Player::ScoreAnimation(int i) {
+	if (scoreAnimationTimer == 0) {
+		scoreAnimationTimer = 500;
+		sprite[2]->changeAnimation(i);
+		sprite[2]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 16)));
+	}
+}
+
+void Player::convertion(int i) {
+	convertionTime = 500;
+	if (sprite[3]->animation() == 0)sprite[3]->changeAnimation(i);
+	sprite[3]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }

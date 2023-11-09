@@ -40,6 +40,8 @@ public:
 	int getMode();
 
 	void clear();
+
+	void finish();
 };
 
 #endif

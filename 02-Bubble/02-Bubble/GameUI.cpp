@@ -14,6 +14,7 @@ enum LN
 
 void GameUI::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
+	finish = false;
 	ti = 0;
 	coins = 0;
 	time = 300;
@@ -321,19 +322,28 @@ void GameUI::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void GameUI::update(int deltaTime, float scroll)
 {
-	ti += deltaTime;
-	if (ti >= 1000) {
-		ti -= 1000;
+	if (finish) {
 		updateTime();
+		updateScore(10);
+		updateTime();
+		updateScore(10);
 	}
-	for (int i = 0; i < 14; i++) {
-		row[i]->update(deltaTime, 0);
-		//row[i]->setPosition(glm::vec2(float(tileMapDispl.x + i * 8), float(tileMapDispl.y + 16)));
+	else {
+		ti += deltaTime;
+		if (ti >= 1000) {
+			ti -= 1000;
+			updateTime();
+		}
+		for (int i = 0; i < 14; i++) {
+			row[i]->update(deltaTime, 0);
+			//row[i]->setPosition(glm::vec2(float(tileMapDispl.x + i * 8), float(tileMapDispl.y + 16)));
+		}
+		for (int i = 0; i < 15; i++) {
+			row2[i]->update(deltaTime, 0);
+			//row2[i]->setPosition(glm::vec2(float(tileMapDispl.x + i * 8), float(tileMapDispl.y + 24)));
+		}
 	}
-	for (int i = 0; i < 15; i++) {
-		row2[i]->update(deltaTime, 0);
-		//row2[i]->setPosition(glm::vec2(float(tileMapDispl.x + i * 8), float(tileMapDispl.y + 24)));
-	}
+
 }
 void GameUI::setFix() {
 	row[0]->changeAnimation(M);
@@ -464,4 +474,8 @@ void GameUI::reset(int s, int c, int w, int t) {
 	coins = c;
 	time = t;
 	world = w;
+}
+
+void GameUI::setFinish() {
+	finish = true;
 }
