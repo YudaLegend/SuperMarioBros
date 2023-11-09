@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "MenuUI.h"
 #include "OtherScenes.h"
+#include "MediaPlayer.h"
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 240
 
@@ -60,6 +61,7 @@ private:
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	// we can have access at any time
 	MenuUI* menu;
+	MediaPlayer* mediaPlayer;
 	OtherScenes* oscenes;
 	int menumode;
 	int secToStop;

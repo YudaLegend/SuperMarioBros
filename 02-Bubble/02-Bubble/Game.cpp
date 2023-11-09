@@ -2,10 +2,11 @@
 #include <GL/glut.h>
 #include "Game.h"
 #include <iostream>
-
+#include <irrKlang.h>
 
 void Game::init()
 {
+	mediaPlayer = MediaPlayer::getInstance();
 	prelevel1 = false;
 	prelevel2 = false;
 	secToStop = 0;
@@ -60,13 +61,15 @@ bool Game::update(int deltaTime)
 	else {
 		//menumode = menu->getMode() != 0 && menu->getMode() != 1;
 		if (menumode == 1 ) {
+			mediaPlayer->levelSound(1);
 			menu->update(deltaTime);
 		}
 		else if (menumode == 0){
+			mediaPlayer->levelSound(1);
 			scene->update(deltaTime);
 		}
 		else if (menumode == 2) {
-			
+			mediaPlayer->levelSound(1);
 			if (life == 0) {
 				oscenes->setPausaMode(6);
 				menu->clear();

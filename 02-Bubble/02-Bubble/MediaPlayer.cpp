@@ -33,51 +33,53 @@ MediaPlayer* MediaPlayer::getInstance() {
 
 void MediaPlayer::levelSound(int level) {
 	if (level == 1) {
-		musicEngine->play2D(level1Sound, true);
+		if(!musicEngine->isCurrentlyPlaying(level1Sound))
+			musicEngine->play2D(level1Sound, true);
 	}
 	else if (level == 2) {
-		musicEngine->play2D(level2Sound, true);
+		if (!musicEngine->isCurrentlyPlaying(level2Sound))
+			musicEngine->play2D(level2Sound, true);
 	}
 }
 
 void MediaPlayer::lifeupSound() {
-	soundEngine->play2D(lifeup, true);
+	soundEngine->play2D(lifeup);
 }
 void MediaPlayer::breakblockSound() {
-	soundEngine->play2D(breakblock, true);
+	soundEngine->play2D(breakblock);
 }
 void MediaPlayer::coinSound() {
-	soundEngine->play2D(coin, true);
+	soundEngine->play2D(coin);
 }
 void MediaPlayer::flagSound() {
-	soundEngine->play2D(flag, true);
+	soundEngine->play2D(flag);
 }
 void MediaPlayer::gameoverSound() {
-	soundEngine->play2D(gameover, true);
+	soundEngine->play2D(gameover);
 }
 void MediaPlayer::smallJumpSound() {
-	soundEngine->play2D(smallJump, true);
+	soundEngine->play2D(smallJump);
 }
 void MediaPlayer::bigJumpSound() {
-	soundEngine->play2D(bigJump, true);
+	soundEngine->play2D(bigJump);
 }
 void MediaPlayer::kickSound() {
-	soundEngine->play2D(kick, true);
+	soundEngine->play2D(kick);
 }
 void MediaPlayer::dieSound() {
-	soundEngine->play2D(die, true);
+	soundEngine->play2D(die);
 }
 void MediaPlayer::pipeSound() {
-	soundEngine->play2D(pipe, true);
+	soundEngine->play2D(pipe);
 }
 void MediaPlayer::powerupSound() {
-	soundEngine->play2D(powerup, true);
+	soundEngine->play2D(powerup);
 }
 void MediaPlayer::powerup_appearsSound() {
-	soundEngine->play2D(powerup_appears, true);
+	soundEngine->play2D(powerup_appears);
 }
 void MediaPlayer::winSound() {
-	soundEngine->play2D(win, true);
+	soundEngine->play2D(win);
 }
 void MediaPlayer::stopAll() {
 	musicEngine->stopAllSounds();
