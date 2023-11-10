@@ -1,22 +1,22 @@
-#ifndef _BLOCK_INCLUDE
-#define _BLOCK_INCLUDE
+#ifndef _COINS_INCLUDE
+#define _COINS_INCLUDE
 
 #include "Entity.h"
 
-class Block : public Entity
+class Coins : public Entity
 {
 
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime, float scroll);
 	void render();
-	void unlock(glm::ivec2 pos);
-	bool isUnlocked();
-	bool MarioDown(glm::ivec2 playerpos);
 
-	Texture desSpritesheet;
+	bool MarioCollide(glm::ivec2 playerpos);
+	bool needDelete();
 
 private:
+
+	bool delet;
 
 };
 

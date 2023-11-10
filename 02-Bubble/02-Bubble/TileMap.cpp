@@ -265,6 +265,7 @@ bool TileMap::collisionInt(const glm::ivec2& pos, const glm::ivec2& size, int* p
 		}
 	}
 	return false;
+
 }
 
 glm::ivec2 TileMap::posInt(const glm::ivec2& pos, const glm::ivec2& size, int* posY) 

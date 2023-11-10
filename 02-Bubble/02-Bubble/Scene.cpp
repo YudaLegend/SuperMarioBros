@@ -43,6 +43,10 @@ Scene::~Scene()
 		jmoneys.clear();
 	if (mush.size() != 0)
 		mush.clear();
+	if (coins.size() != 0)
+		coins.clear();
+	if (star.size() != 0)
+		star.clear();
 	if (destruit_blocks.size() != 0)
 		destruit_blocks.clear();
 	
@@ -56,6 +60,8 @@ void Scene::clear() {
 	int_blocks.clear();
 	jmoneys.clear();
 	mush.clear();
+	coins.clear();
+	star.clear();
 	destruit_blocks.clear();
 }
 void Scene::initMap() {
@@ -72,6 +78,31 @@ void Scene::reshape(int w, int h) {
 
 	projection = glm::ortho(16.f, w - offset, 240.f+16.f, 16.f);
 	projection = glm::scale(projection, glm::vec3(scale));
+}
+
+
+bool Scene::initStar() {
+	for (int i = 0; i < pos_star.size(); ++i) {
+		Star* s = new Star();
+		s->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		s->setPosition(pos_star[i]*16);
+		s->setSize(glm::vec2(16, 16));
+		s->setCollisionMap(map);
+		star.push_back(s);
+	}
+	return true;
+}
+
+bool Scene::initCoins() {
+	for (int i = 0; i < pos_coins.size(); ++i) {
+		Coins* c = new Coins();
+		c->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		c->setPosition(pos_coins[i]*16);
+		c->setSize(glm::vec2(16, 16));
+		coins.push_back(c);
+	}
+	return true;
+
 }
 
 bool Scene::initMush() {
@@ -104,7 +135,7 @@ bool Scene::initJmoneys() {
 	for (int i = 0; i < pos_jmoneys.size(); ++i) {
 		JumpingMoney* jcoins = new JumpingMoney();
 		jcoins->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-		jcoins->setPosition( (pos_jmoneys[i] * 16) + glm::ivec2(4,0) ) ;
+		jcoins->setPosition( (pos_jmoneys[i] * 16) + glm::ivec2(4,0)) ;
 		jcoins->setSize(glm::vec2(16, 16));
 		jmoneys.push_back(jcoins);
 	}
@@ -128,19 +159,23 @@ void Scene::init()
 
 	player->setTileMap(map);
 
-	/*
-	Block* b = new Block();
-	b->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
-	b->setPosition(glm::ivec2(2, 3) * 16);
-	b->setSize(glm::vec2(16, 16));
-	destruit_blocks.push_back(b);
-	*/
+
+	Block* c = new Block();
+	c->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	c->setPosition( glm::ivec2(40, 50));
+	c->setSize(glm::vec2(16, 16));
+	destruit_blocks.push_back(c);
+
+
 
 
 	initJmoneys();
 	initIntBlocks();
 	initEnemies();
 	initMush();
+	initCoins();
+	initStar();
+
 	initGameUI();
 	projection = glm::ortho(16.f, float(SCREEN_WIDTH)+16.f, float(SCREEN_HEIGHT)+16.f, 16.f);
 	currentTime = 0.0f;
@@ -154,6 +189,7 @@ void Scene::update(int deltaTime)
 	glm::ivec2 playerpos = player->getPosition();
 	
 
+
 	for (unsigned int i = 0; i < mush.size(); ++i) {
 
 		if (mush[i]->isActivated()) {
@@ -161,11 +197,11 @@ void Scene::update(int deltaTime)
 
 		}
 		if (mush[i]->touchMario(playerpos)) {
+
 			player->setStartMode(true);
 			mush[i]->setActivate(false);
 			mush[i]->setPosition(glm::ivec2(0, 0));
 		}
-
 		if (player->collisionInt()) {
 			glm::ivec2 blockpos = player->posInt();
 			glm::ivec2 mushPos = mush[i]->getPosition();
@@ -176,6 +212,29 @@ void Scene::update(int deltaTime)
 			}
 		}
 	}
+
+	for (unsigned int i = 0; i < star.size(); ++i) {
+
+		if (star[i]->isActivated()) {
+			star[i]->update(deltaTime, scroll);
+
+		}
+		if (star[i]->touchMario(playerpos)) {
+			player->setStartMode(true);
+			star[i]->setActivate(false);
+			star[i]->setPosition(glm::ivec2(0, 0));
+		}
+		if (player->collisionInt()) {
+			glm::ivec2 blockpos = player->posInt();
+			glm::ivec2 StarPos = star[i]->getPosition();
+
+			if (blockpos == (StarPos / 16)) {
+				star[i]->setActivate(true);
+				star[i]->setHit();
+			}
+		}
+	}
+
 
 	//Scroll la camara
 	if (playerpos.x >= ( -scroll + 129.f) ) {
@@ -250,13 +309,23 @@ void Scene::render()
 	mapBackground->render();
 	map->render();
 
-	/*
+
+
 	destruit_blocks[0]->render();
-	*/
+
+	for (unsigned int i = 0; i < coins.size(); ++i) {
+		coins[i]->render();
+	}
+	
 
 	for (unsigned int i = 0; i < mush.size(); ++i) {
 		if (mush[i]->isActivated()) {
 			mush[i]->render();
+		}
+	}
+	for (unsigned int i = 0; i < star.size(); ++i) {
+		if (star[i]->isActivated()) {
+			star[i]->render();
 		}
 	}
 
