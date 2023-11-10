@@ -25,6 +25,9 @@ Scene::Scene()
 	int_blocks.clear();
 	jmoneys.clear();
 	mush.clear();
+	destruit_blocks.clear();
+	star.clear();
+	coins.clear();
 }
 
 Scene::~Scene()
@@ -80,6 +83,17 @@ void Scene::reshape(int w, int h) {
 	projection = glm::scale(projection, glm::vec3(scale));
 }
 
+
+bool Scene::initDetrui_block() {
+	for (int i = 0; i < destruit_blocks.size(); ++i) {
+		Block* b = new Block();
+		b->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		b->setPosition(pos_destru_blocks[i] * 16);
+		b->setSize(glm::vec2(16, 16));
+		destruit_blocks.push_back(b);
+	}
+	return true;
+}
 
 bool Scene::initStar() {
 	for (int i = 0; i < pos_star.size(); ++i) {
@@ -162,7 +176,7 @@ void Scene::init()
 
 	Block* c = new Block();
 	c->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	c->setPosition( glm::ivec2(40, 50));
+	c->setPosition(glm::ivec2(20, 9)*16);
 	c->setSize(glm::vec2(16, 16));
 	destruit_blocks.push_back(c);
 
@@ -187,6 +201,8 @@ void Scene::update(int deltaTime)
 
 	player->update(deltaTime,scroll);
 	glm::ivec2 playerpos = player->getPosition();
+	
+
 	
 
 
@@ -242,6 +258,30 @@ void Scene::update(int deltaTime)
 	}
 
 	player->update(deltaTime, scroll);
+
+
+
+	
+
+	if (player->collisionBlock()) {
+		glm::ivec2 block = player->posInt();
+
+		for (unsigned int i = 0; i < destruit_blocks.size(); ++i) {
+			if (!destruit_blocks[i]->isUnlocked()) {
+				destruit_blocks[i]->unlock(block);
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i < destruit_blocks.size(); ++i) {
+		destruit_blocks[i]->update(deltaTime, scroll);
+		
+		if (destruit_blocks[i]->deadC()) {
+			glm::ivec2 dpos = destruit_blocks[i]->getPosition();
+			map->setMapTile(dpos / 16);
+			destruit_blocks.erase(std::remove(destruit_blocks.begin(), destruit_blocks.end(), destruit_blocks[i]), destruit_blocks.end());
+		}
+	}
 
 	//update bloques interrogantes
 	for (unsigned int i = 0; i < int_blocks.size(); ++i) {
@@ -311,7 +351,9 @@ void Scene::render()
 
 
 
-	destruit_blocks[0]->render();
+	for (int i = 0; i < destruit_blocks.size(); ++i) {
+		destruit_blocks[i]->render();
+	}
 
 	for (unsigned int i = 0; i < coins.size(); ++i) {
 		coins[i]->render();

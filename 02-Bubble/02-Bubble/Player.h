@@ -22,6 +22,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 
 	bool collisionInt();
+	bool collisionBlock();
 
 	glm::ivec2 posInt();
 

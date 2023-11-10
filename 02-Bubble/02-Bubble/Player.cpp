@@ -582,9 +582,17 @@ bool Player::collisionInt() {
 	}
 	else {
 		return map->collisionInt(posPlayer, glm::ivec2(16, 32), &posPlayer.y);
+	}	
+	
+}
+bool Player::collisionBlock() {
+	if (!mariomode) {
+		return map->collisionBlock(posPlayer, glm::ivec2(16, 16), &posPlayer.y);
 	}
-	
-	
+	else {
+		return map->collisionBlock(posPlayer, glm::ivec2(16, 32), &posPlayer.y);
+	}
+
 }
 
 glm::ivec2 Player::posInt() {

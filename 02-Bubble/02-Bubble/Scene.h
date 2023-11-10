@@ -39,6 +39,7 @@ public:
 	bool initMush();
 	bool initCoins();
 	bool initStar();
+	bool initDetrui_block();
 
 	void initGameUI();
 	bool MarioUpEnemy(Player& p, Enemy& e);
@@ -63,7 +64,7 @@ private:
 	vector<glm::ivec2> pos_blocks = {glm::vec2(16,9), glm::vec2(21,9), glm::vec2(22,5), glm::vec2(23,9),glm::vec2(78,9), glm::vec2(94,5),glm::vec2(106,9),glm::vec2(109,5),glm::vec2(109,9),glm::vec2(112,9),glm::vec2(129,5),glm::vec2(130,5),glm::vec2(170,9) };
 
 	vector<Block*> destruit_blocks;
-	vector<glm::ivec2> pos_destru_blocks = {};
+	vector<glm::ivec2> pos_destru_blocks = { glm::vec2(20,9) };
 
 	vector<JumpingMoney*> jmoneys;
 	vector<glm::ivec2> pos_jmoneys = { glm::vec2(16,9), glm::vec2(22,5), glm::vec2(23,9), glm::vec2(94,5),glm::vec2(106,9),glm::vec2(109,9),glm::vec2(112,9),glm::vec2(129,5),glm::vec2(130,5),glm::vec2(170,9) };

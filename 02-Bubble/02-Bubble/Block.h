@@ -12,11 +12,11 @@ public:
 	void render();
 	void unlock(glm::ivec2 pos);
 	bool isUnlocked();
-	bool MarioDown(glm::ivec2 playerpos);
+	bool needDelet();
+	bool deadC();
 
-	Texture desSpritesheet;
-
-private:
+	bool delet;
+	int deadCounter = 0;
 
 };
 

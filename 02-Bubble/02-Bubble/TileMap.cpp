@@ -265,7 +265,28 @@ bool TileMap::collisionInt(const glm::ivec2& pos, const glm::ivec2& size, int* p
 		}
 	}
 	return false;
+}
 
+bool TileMap::collisionBlock(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = pos.y / tileSize;  // Adjusted for upward movement
+
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] == 17)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void TileMap::setMapTile(glm::ivec2 pos) {
+	map[pos.y * mapSize.x + pos.x] = 0;
 }
 
 glm::ivec2 TileMap::posInt(const glm::ivec2& pos, const glm::ivec2& size, int* posY) 
@@ -278,7 +299,7 @@ glm::ivec2 TileMap::posInt(const glm::ivec2& pos, const glm::ivec2& size, int* p
 
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] == 2)
+		if (map[y * mapSize.x + x] == 2 || map[y * mapSize.x + x] == 17 )
 		{
 			return glm::vec2(x, y);
 		}
