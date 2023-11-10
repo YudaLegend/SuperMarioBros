@@ -11,8 +11,9 @@ void Block::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int
 	die = false;
 	spritesheet.resize(2);
 	sprite.resize(2);
+
 	spritesheet[0].loadFromFile("images/Block.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spritesheet[0].loadFromFile("images/BleakBlock.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet[0].loadFromFile("images/BreakBlock.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite[0]->Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.5f, 1.f), &spritesheet[0], &shaderProgram);
 	sprite[0]->setNumberAnimations(2);
 
@@ -22,7 +23,7 @@ void Block::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int
 	sprite[0]->addKeyframe(0, glm::vec2(0.5f, 0.f));
 
 	sprite[0]->changeAnimation(DayNight);
-	sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 
 	sprite[1]->Sprite::createSprite(glm::ivec2(64, 96), glm::vec2(1/11.f, 1.f), &spritesheet[1], &shaderProgram);
 	sprite[1]->setNumberAnimations(1);
@@ -41,7 +42,7 @@ void Block::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int
 	sprite[1]->addKeyframe(0, glm::vec2(10 / 11.f, 0.f));
 
 	sprite[1]->changeAnimation(0);
-	sprite[1]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite[1]->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 
 }
 void Block::update(int deltaTime, float scroll) {
@@ -58,6 +59,11 @@ void Block::update(int deltaTime, float scroll) {
 		sprite[0]->update(deltaTime, scroll);
 	}
 }
+
+void Block::setSize(const glm::vec2& size) {
+	this->size = size;
+}
+
 void Block::render() {
 	if (breaking) {
 		sprite[1]->render();
@@ -74,8 +80,8 @@ void Block::breakBlock() {
 }
 
 void Block::setPosition(const glm::vec2& pos) {
-	posPlayer = pos;
-	sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	position = pos;
+	sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + position.x), float(tileMapDispl.y + position.y)));
 }
 
 bool Block::getPhysics() {

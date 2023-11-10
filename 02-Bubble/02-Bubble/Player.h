@@ -28,7 +28,7 @@ public:
 	glm::ivec2 getPosition();
 
 	void setJump();
-	void setStartMode();
+	void setStartMode(bool t);
 
 	void setSmall();
 	void bigMarioButton();
@@ -64,6 +64,8 @@ private:
 	vector <Texture> spritesheet;
 	vector <Sprite*> sprite;
 	TileMap* map;
+
+	float scroll = 0;
 };
 
 

@@ -331,6 +331,8 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Player::update(int deltaTime, float scroll)
 {
+	this->scroll = scroll;
+
 	if (convertionTime > 0) {
 		convertionTime -= deltaTime;
 		sprite[3]->update(deltaTime, scroll);
@@ -420,7 +422,7 @@ void Player::SmallMario() {
 	}
 
 
-	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)) || posPlayer.x <= scroll)
 	{
 		posPlayer.x += speed;
 		if (starmode && sprite[0]->animation() != STAND_LEFT_STAR) sprite[0]->changeAnimation(STAND_LEFT_STAR);
@@ -540,8 +542,8 @@ void Player::render()
 }
 
 
-void Player::setStartMode() {
-	starmode = true;
+void Player::setStartMode(bool t) {
+	starmode = t;
 	
 }
 
@@ -667,7 +669,7 @@ void Player::BigMarioNormal(bool st) {
 		accomulation = 0;
 	}
 
-	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 32)))
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 32)) || posPlayer.x <= scroll)
 	{
 		posPlayer.x += speed;
 		if (st && sprite[1]->animation() != B_STAND_LEFT_STAR) sprite[1]->changeAnimation(B_STAND_LEFT_STAR);
@@ -782,7 +784,7 @@ void Player::BigMarioMiddle() {
 		accomulation = 0;
 	}
 
-	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 24)))
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 24)) || posPlayer.x <= scroll )
 	{
 		posPlayer.x += 1;
 	}

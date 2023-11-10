@@ -2,7 +2,9 @@
 #define _BLOCK_INCLUDE
 #include "Sprite.h"
 #include "TileMap.h"
-class Block
+#include "Entity.h"
+
+class Block 
 {
 public:
 	
@@ -10,11 +12,13 @@ public:
 	void update(int deltaTime, float scroll);
 	void render();
 	void breakBlock();
+	void setSize(const glm::vec2& size);
 	void setPosition(const glm::vec2& pos);
 	bool getPhysics();
 	bool getDie();
+
 private:
-	glm::ivec2 tileMapDispl, posPlayer;
+	glm::ivec2 tileMapDispl, position, size;
 	int breakTimer;
 	bool breaking;
 	bool physics;

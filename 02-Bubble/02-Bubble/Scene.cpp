@@ -43,7 +43,9 @@ Scene::~Scene()
 		jmoneys.clear();
 	if (mush.size() != 0)
 		mush.clear();
-
+	if (destruit_blocks.size() != 0)
+		destruit_blocks.clear();
+	
 }
 
 void Scene::clear() {
@@ -54,6 +56,7 @@ void Scene::clear() {
 	int_blocks.clear();
 	jmoneys.clear();
 	mush.clear();
+	destruit_blocks.clear();
 }
 void Scene::initMap() {
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -71,6 +74,17 @@ void Scene::reshape(int w, int h) {
 	projection = glm::scale(projection, glm::vec3(scale));
 }
 
+bool Scene::initMush() {
+	for (int i = 0; i < pos_mush.size(); ++i) {
+		MushRoom* m = new MushRoom();
+		m->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		m->setPosition(pos_mush[i] * 16);
+		m->setSize(glm::vec2(16, 16));
+		m->setCollisionMap(map);
+		mush.push_back(m);
+	}
+	return true;
+}
 
 bool Scene::initIntBlocks() {
 	
@@ -102,9 +116,10 @@ void Scene::init()
 {
 	initShaders();
 	
+	this->fileName = "levels/level01.txt";
+
 	initMap();
 	
-	this->fileName = "levels/level01.txt";
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -113,17 +128,19 @@ void Scene::init()
 
 	player->setTileMap(map);
 
-	
-	MushRoom* m = new MushRoom();
-	m->init(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	m->setPosition(glm::ivec2(10,50));
-	m->setSize(glm::vec2(16, 16));
-	mush.push_back(m);
+	/*
+	Block* b = new Block();
+	b->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+	b->setPosition(glm::ivec2(2, 3) * 16);
+	b->setSize(glm::vec2(16, 16));
+	destruit_blocks.push_back(b);
+	*/
 
 
 	initJmoneys();
 	initIntBlocks();
 	initEnemies();
+	initMush();
 	initGameUI();
 	projection = glm::ortho(16.f, float(SCREEN_WIDTH)+16.f, float(SCREEN_HEIGHT)+16.f, 16.f);
 	currentTime = 0.0f;
@@ -136,6 +153,30 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime,scroll);
 	glm::ivec2 playerpos = player->getPosition();
 	
+
+	for (unsigned int i = 0; i < mush.size(); ++i) {
+
+		if (mush[i]->isActivated()) {
+			mush[i]->update(deltaTime, scroll);
+
+		}
+		if (mush[i]->touchMario(playerpos)) {
+			player->setStartMode(true);
+			mush[i]->setActivate(false);
+			mush[i]->setPosition(glm::ivec2(0, 0));
+		}
+
+		if (player->collisionInt()) {
+			glm::ivec2 blockpos = player->posInt();
+			glm::ivec2 mushPos = mush[i]->getPosition();
+
+			if (blockpos == (mushPos / 16)) {
+				mush[i]->setActivate(true);
+				mush[i]->setHit();
+			}
+		}
+	}
+
 	//Scroll la camara
 	if (playerpos.x >= ( -scroll + 129.f) ) {
 		scroll = (-playerpos.x + 128.f)+1;
@@ -178,7 +219,7 @@ void Scene::update(int deltaTime)
 			enemies[i]->update(deltaTime, scroll);
 
 			if (enemies[i]->enemyKillMario(playerpos)) {
-				player->setStartMode();
+				player->setStartMode(true);
 			}
 
 			if (enemies[i]->MarioUp(playerpos, &playerpos.y)) {
@@ -209,7 +250,15 @@ void Scene::render()
 	mapBackground->render();
 	map->render();
 
-	mush[0]->render();
+	/*
+	destruit_blocks[0]->render();
+	*/
+
+	for (unsigned int i = 0; i < mush.size(); ++i) {
+		if (mush[i]->isActivated()) {
+			mush[i]->render();
+		}
+	}
 
 	for (unsigned int i = 0; i < jmoneys.size(); ++i) {
 		jmoneys[i]->render();
